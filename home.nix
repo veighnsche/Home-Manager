@@ -20,9 +20,7 @@ let
           in
             if type == "regular" || type == "symlink" then
               {
-                "${rel}" = {
-                  source = mkSymlink rel;
-                };
+                "${rel}".source = mkSymlink rel;
               }
             else if type == "directory" then
               gatherFiles rel fullPath

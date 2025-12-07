@@ -59,8 +59,8 @@
       cat = "bat";
       ping = "prettyping --nolegend";
 
-      hm = "nix run home-manager/master -- switch --flake /home/vince/Home-Manager#vince";
-      hmn = "nix run home-manager/master -- news --flake /home/vince/Home-Manager#vince";
+      hm = "nix run home-manager/master -- switch --flake /home/vince/Home-Manager#vince -b backup";
+      hmn = "nix run home-manager/master -- news --flake /home/vince/Home-Manager#vince -b backup";
     };
 
     oh-my-zsh = {

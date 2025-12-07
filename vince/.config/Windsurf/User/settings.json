@@ -1,0 +1,8 @@
+{
+    "files.autoSave": "afterDelay",
+    "terminal.integrated.defaultProfile.linux": "zsh",
+    "git.autofetch": true,
+    "git.confirmSync": false,
+    "editor.fontFamily": "'JetBrainsMono NFM', 'Droid Sans Mono', 'monospace', monospace",
+    "editor.formatOnSave": true
+}

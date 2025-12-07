@@ -37,6 +37,8 @@ in
 {
   imports = [
     ./shell.nix
+    ./wlroots.nix
+    ./kde.nix
   ];
 
   # Tell Home Manager which user this config is for
@@ -51,8 +53,6 @@ in
     windsurf
     nodejs_24
     uv
-    niri
-    rofi
   ];
 
   # Allow managing HM itself via this config

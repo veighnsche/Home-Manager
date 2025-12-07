@@ -20,7 +20,10 @@ let
           in
             if type == "regular" || type == "symlink" then
               {
-                "${rel}".source = mkSymlink rel;
+                "${rel}" = {
+                  source = mkSymlink rel;
+                  force = true;
+                };
               }
             else if type == "directory" then
               gatherFiles rel fullPath
@@ -48,6 +51,8 @@ in
     windsurf
     nodejs_24
     uv
+    niri
+    rofi
   ];
 
   # Allow managing HM itself via this config

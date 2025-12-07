@@ -1,0 +1,142 @@
+{
+  "layer": "top",
+  "position": "top",
+  "output": ["HDMI-A-1"],
+  "height": 32,
+  "margin-top": 16,
+  "margin-bottom": 0,
+  "margin-right": 80,
+  "margin-left": 80,
+
+  "modules-left": [
+    "clock",
+    "niri/window"
+  ],
+  "modules-center": [],
+  "modules-right": [
+    "pulseaudio#icon",
+    "pulseaudio#value",
+    "memory#icon",
+    "memory#value",
+    "temperature#icon",
+    "temperature#value",
+    "cpu#icon",
+    "cpu#value",
+    "disk#icon",
+    "disk#value",
+    "network#icon",
+    "network#value",
+    "bluetooth#icon"
+  ],
+
+  "clock": {
+    "interval": 1,
+    "format": "{:%H:%M:%S | %A · %d.%m.%Y}",
+    "tooltip": false,
+    "on-click": "sh -c 'merkuro-calendar --platformtheme kde'"
+  },
+
+  "niri/window": {
+    "format": " {title}"
+  },
+
+  "network#icon": {
+    "interface": "wlo1",
+    "format-wifi": "",
+    "format-ethernet": "󰈁",
+    "format-disconnected": "󰖪 󰈂",
+    "tooltip": false,
+    "on-click": "sh -c 'nm-connection-editor'"
+  },
+
+  "network#value": {
+    "interface": "wlo1",
+    "format-wifi": "{signalStrength}%",
+    "format-ethernet": "{ifname}",
+    "format-disconnected": "",
+    "tooltip": false,
+    "on-click": "sh -c 'nm-connection-editor'"
+  },
+
+  "disk#icon": {
+    "path": "/",
+    "interval": 30,
+    "unit": "GiB",
+    "format": "󰋊",
+    "tooltip": false
+  },
+
+  "disk#value": {
+    "path": "/",
+    "interval": 30,
+    "unit": "GiB",
+    "format": "{specific_used:0.1f}G",
+    "tooltip": false,
+    "on-click": "sh -c 'dolphin --platformtheme kde'"
+  },
+
+  "cpu#icon": {
+    "interval": 2,
+    "format": "",
+    "tooltip": false,
+    "on-click": "sh -c 'plasma-systemmonitor --platformtheme kde'"
+  },
+
+  "cpu#value": {
+    "format": "{usage:2}%",
+    "interval": 2,
+    "tooltip": false,
+    "on-click": "sh -c 'plasma-systemmonitor --platformtheme kde'"
+  },
+
+  "temperature#icon": {
+    "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+    "critical-threshold": 80,
+    "format": "",
+    "tooltip": false,
+    "on-click": "sh -c 'coolercontrol'"
+  },
+
+  "temperature#value": {
+    "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+    "critical-threshold": 80,
+    "format": "{temperatureC}C",
+    "tooltip": false,
+    "on-click": "sh -c 'coolercontrol'"
+  },
+
+  "memory#icon": {
+    "format": "󰘚",
+    "tooltip": false
+  },
+
+  "memory#value": {
+    "interval": 5,
+    "unit": "GiB",
+    "format": "{used:0.1f}G",
+    "tooltip": false,
+    "on-click": "sh -c 'plasma-systemmonitor --platformtheme kde'"
+  },
+
+  "pulseaudio#icon": {
+    "format": "",
+    "format-muted": "",
+    "tooltip": false,
+    "on-click": "sh -c 'pavucontrol'"
+  },
+
+  "pulseaudio#value": {
+    "format": "{volume}%",
+    "format-muted": "{volume}%",
+    "tooltip": false,
+    "on-click": "sh -c 'pavucontrol'"
+  },
+
+  "bluetooth#icon": {
+    "format": "󰂯",
+    "format-connected": "󰂱",
+    "format-off": "󰂲",
+    "tooltip": false,
+    "on-click": "sh -c 'blueman-manager'"
+  }
+}

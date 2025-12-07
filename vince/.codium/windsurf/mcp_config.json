@@ -1,0 +1,47 @@
+{
+  "mcpServers": {
+    "git": {
+      "args": [
+        "mcp-server-git"
+      ],
+      "command": "uvx",
+      "disabled": false,
+      "env": {}
+    },
+    "memory": {
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "command": "npx",
+      "disabled": false,
+      "env": {
+        "MEMORY_FILE_PATH": ""
+      }
+    },
+    "nixos": {
+      "args": [
+        "run",
+        "github:utensils/mcp-nixos",
+        "--"
+      ],
+      "command": "nix",
+      "disabledTools": [
+        "darwin_options_by_prefix",
+        "darwin_list_options",
+        "darwin_stats",
+        "darwin_info",
+        "darwin_search"
+      ]
+    },
+    "sequential-thinking": {
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "command": "npx",
+      "disabled": false,
+      "env": {}
+    }
+  }
+}

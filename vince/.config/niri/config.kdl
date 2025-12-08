@@ -164,13 +164,12 @@ layer-rule {
     }
 }
 
-// TEAM_524: waybar + mako now managed by systemd --user
 
-// TEAM_524: swayidle now managed by systemd --user
-// spawn-sh-at-startup "firefox --new-window https://www.chatgpt.com"
-// spawn-sh-at-startup "firefox --new-window https://news.google.com/home"
+spawn-at-startup "quickshell"
 
-spawn-at-startup "waybar"
+// TEAM_007: Session services for niri
+spawn-at-startup "polkit-gnome-agent"
+spawn-at-startup "nm-applet"
 
 hotkey-overlay {
     skip-at-startup

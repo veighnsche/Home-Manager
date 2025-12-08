@@ -12,7 +12,7 @@ Singleton {
   
   Process {
     id: timeProc
-    command: ["date", "+%B%e %A | %H:%M:%S"]
+    command: ["date", "+%B%e %A <font color='#66ffffff'>·</font> %H:%M:%S"]
     running: true
     
     stdout: StdioCollector {

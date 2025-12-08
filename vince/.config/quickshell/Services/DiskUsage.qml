@@ -14,6 +14,22 @@ Singleton {
   // Numeric value if you need it for bars, etc.
   property real homeUsedGiB: 0.0
 
+  // Shared function to format disk usage with leading zeros
+  function formatDiskUsage(giB) {
+    if (isNaN(giB)) return "0 GiB";
+    
+    const usedStr = giB.toFixed(1);
+    const usedNum = parseFloat(usedStr);
+    
+    if (usedNum < 10) {
+      return "<font color='#66ffffff'>00</font>" + usedStr + " GiB";
+    } else if (usedNum < 100) {
+      return "<font color='#66ffffff'>0</font>" + usedStr + " GiB";
+    } else {
+      return usedStr + " GiB";
+    }
+  }
+
   // Home partition usage (fallback: you can change /home to / if needed)
   Process {
     id: homeDiskProc
@@ -36,15 +52,7 @@ Singleton {
 
         const usedGiB = usedBytes / (1024 * 1024 * 1024);
         root.homeUsedGiB = usedGiB;
-        const usedStr = usedGiB.toFixed(1);
-        const usedNum = parseFloat(usedStr);
-        if (usedNum < 10) {
-          root.homeUsed = "<font color='#66ffffff'>00</font>" + usedStr + " GiB";
-        } else if (usedNum < 100) {
-          root.homeUsed = "<font color='#66ffffff'>0</font>" + usedStr + " GiB";
-        } else {
-          root.homeUsed = usedStr + " GiB";
-        }
+        root.homeUsed = root.formatDiskUsage(usedGiB);
       }
     }
   }

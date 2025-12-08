@@ -20,6 +20,20 @@ Singleton {
   property double _cpuTotalPrev: 0
   property double _cpuIdlePrev: 0
 
+  // Shared function to format CPU usage with leading zero
+  function formatCpuUsage(usage) {
+    if (isNaN(usage)) return "0.0 %";
+    return (usage < 10 ? "<font color='#66ffffff'>0</font>" : "") + usage.toFixed(1) + " %";
+  }
+
+  // Shared function to format RAM usage with leading zero
+  function formatRamUsage(giB) {
+    if (isNaN(giB)) return "0.0 GiB";
+    const usedStr = giB.toFixed(1);
+    const usedNum = parseFloat(usedStr);
+    return (usedNum < 10 ? "<font color='#66ffffff'>0</font>" : "") + usedStr + " GiB";
+  }
+
   // ───────────────── CPU from /proc/stat ─────────────────
   Process {
     id: cpuProc
@@ -56,7 +70,7 @@ Singleton {
           }
 
           root.cpuUsageValue = usage;
-          root.cpuUsage = (usage < 10 ? "<font color='#66ffffff'>0</font>" : "") + usage.toFixed(1) + " %";
+          root.cpuUsage = root.formatCpuUsage(usage);
         }
 
         root._cpuTotalPrev = total;
@@ -101,13 +115,7 @@ Singleton {
         const usedGiB  = memUsedKB  / (1024 * 1024);
 
         root.ramUsedGiB  = usedGiB;
-        const usedStr = usedGiB.toFixed(1);
-        const usedNum = parseFloat(usedStr);
-        if (usedNum < 10) {
-          root.ramUsed = "<font color='#66ffffff'>0</font>" + usedStr + " GiB";
-        } else {
-          root.ramUsed = usedStr + " GiB";
-        }
+        root.ramUsed = root.formatRamUsage(usedGiB);
       }
     }
   }

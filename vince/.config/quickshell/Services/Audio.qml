@@ -8,14 +8,29 @@ import QtQuick
 Singleton {
   id: root
 
-  property string volume: "0%"
+  property string volume: "<font color='#66ffffff'>000</font> %"
   property bool muted: false
+
+  // Shared function to format volume with leading zeros
+  function formatVolume(volumeNum) {
+    if (isNaN(volumeNum)) return "0 %";
+    
+    if (volumeNum === 0) {
+      return "<font color='#66ffffff'>000</font> %";
+    } else if (volumeNum < 10) {
+      return "<font color='#66ffffff'>00</font>" + volumeNum + " %";
+    } else if (volumeNum < 100) {
+      return "<font color='#66ffffff'>0</font>" + volumeNum + " %";
+    } else {
+      return volumeNum + " %";
+    }
+  }
 
   // ─────────────────────────────────────────────
   // Helpers
   // ─────────────────────────────────────────────
   function refresh() {
-    volumeQuery.running = false;
+    volumeQuery.running = false;21
     volumeQuery.running = true;
     muteQuery.running = false;
     muteQuery.running = true;
@@ -36,17 +51,8 @@ Singleton {
       onStreamFinished: {
         const txt = this.text.trim();
         if (txt.length > 0) {
-          // Remove % and convert to number
           const volumeNum = parseInt(txt.replace('%', ''));
-          if (volumeNum === 0) {
-            root.volume = "<font color='#66ffffff'>000</font> %";
-          } else if (volumeNum < 10) {
-            root.volume = "<font color='#66ffffff'>00</font>" + volumeNum + " %";
-          } else if (volumeNum < 100) {
-            root.volume = "<font color='#66ffffff'>0</font>" + volumeNum + " %";
-          } else {
-            root.volume = volumeNum + " %";
-          }
+          root.volume = root.formatVolume(volumeNum);
         }
       }
     }

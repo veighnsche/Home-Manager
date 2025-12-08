@@ -18,6 +18,11 @@ let
       ln -s ${niri-session-fixed}/bin/niri-session $out/bin/niri-session
     '';
   };
+
+  # TEAM_007: Wrapper to put polkit agent in PATH (binary is in libexec/)
+  polkit-gnome-agent = pkgs.writeShellScriptBin "polkit-gnome-agent" ''
+    exec ${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1 "$@"
+  '';
 in
 {
   home.packages = with pkgs; [
@@ -25,6 +30,16 @@ in
     # rofi
     # waybar
     quickshell
+
+    # TEAM_007: niri session services
+    polkit-gnome-agent     # Polkit authentication agent (wrapper)
+    networkmanagerapplet   # Network tray applet (nm-applet)
   ];
 
+  # TEAM_007: GNOME Keyring for secret storage (WiFi passwords)
+  # Starts via systemd user service, triggered by graphical-session-pre.target
+  services.gnome-keyring = {
+    enable = true;
+    components = [ "secrets" ];
+  };
 }

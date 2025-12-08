@@ -43,9 +43,13 @@ Scope {
       spacing: 24
 
       AudioWidget {}
+      SeparatorWidget {}
       DiskUsageWidget {}
+      SeparatorWidget {}
       TemperatureWidget {}
+      SeparatorWidget {}
       CpuWidget {}
+      SeparatorWidget {}
       RamWidget {}
       // NetworkWidget {}
     }

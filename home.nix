@@ -42,9 +42,14 @@ in
 
     libreoffice-qt-fresh
 
+    kdePackages.kdeconnect-kde
+
     hunspell
     hunspellDicts.en_US
     hunspellDicts.nl_NL
+
+    # QR code generation for URL sharing
+    qrencode
   ];
 
   # Environment variables for Python package compilation
@@ -52,6 +57,11 @@ in
     export PKG_CONFIG_PATH="${pkgs.libffi.dev}/lib/pkgconfig:${pkgs.openssl.dev}/lib/pkgconfig"
     export NIX_CFLAGS_COMPILE="-I${pkgs.libffi.dev}/include -I${pkgs.openssl.dev}/include"
   '';
+
+  # Add ~/bin to PATH for global script access
+  home.sessionVariables = {
+    PATH = "$HOME/bin:$PATH";
+  };
 
   # Allow managing HM itself via this config
   programs.home-manager.enable = true;

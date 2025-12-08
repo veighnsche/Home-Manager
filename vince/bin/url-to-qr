@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Share URL to Android via QR code
+# Usage: share-url "https://example.com/video"
+
+if [ -z "$1" ]; then
+    echo "Usage: share-url <URL>"
+    echo "Example: share-url \"https://youtube.com/watch?v=...\""
+    exit 1
+fi
+
+URL="$1"
+
+# Try to display QR code in terminal first
+if command -v qrencode >/dev/null 2>&1; then
+    echo "QR code for: $URL"
+    echo "Scan with your Android tablet camera or QR scanner app"
+    echo ""
+    qrencode -t ANSI "$URL"
+    
+    echo ""
+    echo "QR code displayed above. If you need a PNG file, run:"
+    echo "qrencode -o qr.png \"$URL\""
+else
+    echo "Error: qrencode not found. Please install it with:"
+    echo "home-manager switch"
+    exit 1
+fi

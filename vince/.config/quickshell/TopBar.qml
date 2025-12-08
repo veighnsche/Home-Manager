@@ -1,7 +1,7 @@
 // TopBar.qml
 import Quickshell
 import QtQuick
-import "../Widgets"
+import "./Widgets"
 
 Scope {
   // no more time object

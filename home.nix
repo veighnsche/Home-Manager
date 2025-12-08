@@ -15,8 +15,8 @@ in
 {
   imports = [
     ./shell.nix
-    ./wlroots.nix
     ./kde.nix
+    ./wlroots.nix
   ];
 
   # Tell Home Manager which user this config is for

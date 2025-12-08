@@ -14,7 +14,7 @@
 
 { lib }:
 
-{ path, mkSource, force ? true }:
+{ path, mkSource, force ? true, markerFile ? ".symlink-folder" }:
 
 let
   gatherFilesRec = prefix: currentPath:
@@ -27,7 +27,10 @@ let
             rel = if prefix == "" then name else "${prefix}/${name}";
             fullPath = currentPath + "/${name}";
           in
-            if type == "regular" || type == "symlink" then
+            # Skip the marker file itself
+            if name == markerFile then
+              { }
+            else if type == "regular" || type == "symlink" then
               {
                 "${rel}" = {
                   source = mkSource rel;
@@ -35,7 +38,21 @@ let
                 };
               }
             else if type == "directory" then
-              gatherFilesRec rel fullPath
+              let
+                dirContents = builtins.readDir fullPath;
+                dirHasMarker = dirContents ? ${markerFile} && dirContents.${markerFile} == "regular";
+              in
+                if dirHasMarker then
+                  # Symlink the folder itself
+                  {
+                    "${rel}" = {
+                      source = mkSource rel;
+                      inherit force;
+                    };
+                  }
+                else
+                  # Recurse as before
+                  gatherFilesRec rel fullPath
             else
               { }
         )

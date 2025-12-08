@@ -1,8 +1,7 @@
 // shell.qml
 import Quickshell
-import "Bars"
+import "./Bars"
 
 Scope {
   TopBar {}
-  // LeftBar {}
 }

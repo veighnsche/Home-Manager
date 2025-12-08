@@ -35,8 +35,19 @@ Singleton {
     stdout: StdioCollector {
       onStreamFinished: {
         const txt = this.text.trim();
-        if (txt.length > 0)
-          root.volume = txt;
+        if (txt.length > 0) {
+          // Remove % and convert to number
+          const volumeNum = parseInt(txt.replace('%', ''));
+          if (volumeNum === 0) {
+            root.volume = "<font color='#66ffffff'>000</font> %";
+          } else if (volumeNum < 10) {
+            root.volume = "<font color='#66ffffff'>00</font>" + volumeNum + " %";
+          } else if (volumeNum < 100) {
+            root.volume = "<font color='#66ffffff'>0</font>" + volumeNum + " %";
+          } else {
+            root.volume = volumeNum + " %";
+          }
+        }
       }
     }
   }

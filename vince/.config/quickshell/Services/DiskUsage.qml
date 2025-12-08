@@ -7,63 +7,61 @@ import QtQuick
 
 Singleton {
   id: root
-  
-  property string rootUsage: "0%"
-  property string rootUsed: "0GB"
-  property string rootTotal: "0GB"
-  property string homeUsage: "0%"
-  property string homeUsed: "0GB"
-  property string homeTotal: "0GB"
-  
-  // Root partition usage
-  Process {
-    id: rootDiskProc
-    command: ["sh", "-c", "df -h / | tail -1 | awk '{print $3\"/\"$2\" (\"$5\")\"}'"]
-    running: true
-    
-    stdout: StdioCollector {
-      onStreamFinished: {
-        let parts = this.text.trim().split('/');
-        if (parts.length >= 2) {
-          root.rootUsed = parts[0].trim();
-          let totalAndPercent = parts[1].split('(');
-          root.rootTotal = totalAndPercent[0].trim();
-          if (totalAndPercent.length > 1) {
-            root.rootUsage = totalAndPercent[1].replace(')', '').trim();
-          }
-        }
-      }
-    }
-  }
-  
-  // Home partition usage
+
+  // Display string
+  property string homeUsed: "0 GiB"
+
+  // Numeric value if you need it for bars, etc.
+  property real homeUsedGiB: 0.0
+
+  // Home partition usage (fallback: you can change /home to / if needed)
   Process {
     id: homeDiskProc
-    command: ["sh", "-c", "df -h /home 2>/dev/null | tail -1 | awk '{print $3\"/\"$2\" (\"$5\")\"}' || df -h / | tail -1 | awk '{print $3\"/\"$2\" (\"$5\")\"}'"]
-    running: true
-    
+    command: [
+      "sh", "-c",
+      // prints a single number: used bytes
+      "df -B1 --output=used /home 2>/dev/null | tail -n 1"
+    ]
+    running: false
+
     stdout: StdioCollector {
       onStreamFinished: {
-        let parts = this.text.trim().split('/');
-        if (parts.length >= 2) {
-          root.homeUsed = parts[0].trim();
-          let totalAndPercent = parts[1].split('(');
-          root.homeTotal = totalAndPercent[0].trim();
-          if (totalAndPercent.length > 1) {
-            root.homeUsage = totalAndPercent[1].replace(')', '').trim();
-          }
+        const txt = this.text.trim();
+        if (!txt)
+          return;
+
+        const usedBytes = Number(txt);
+        if (isNaN(usedBytes))
+          return;
+
+        const usedGiB = usedBytes / (1024 * 1024 * 1024);
+        root.homeUsedGiB = usedGiB;
+        const usedStr = usedGiB.toFixed(1);
+        const usedNum = parseFloat(usedStr);
+        if (usedNum < 10) {
+          root.homeUsed = "<font color='#66ffffff'>00</font>" + usedStr + " GiB";
+        } else if (usedNum < 100) {
+          root.homeUsed = "<font color='#66ffffff'>0</font>" + usedStr + " GiB";
+        } else {
+          root.homeUsed = usedStr + " GiB";
         }
       }
     }
   }
-  
+
+  // Poll occasionally – this is fine for disk usage
   Timer {
-    interval: 10000
+    interval: 60000    // 60s, change if you want
     running: true
     repeat: true
     onTriggered: {
-      rootDiskProc.running = true;
+      homeDiskProc.running = false;
       homeDiskProc.running = true;
     }
+  }
+
+  // Run once immediately so you don't see 0 GiB for the first interval
+  Component.onCompleted: {
+    homeDiskProc.running = true;
   }
 }

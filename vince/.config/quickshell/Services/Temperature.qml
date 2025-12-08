@@ -21,7 +21,19 @@ Singleton {
       onStreamFinished: {
         let temp = this.text.trim();
         if (temp) {
-          root.cpuTemp = temp;
+          // Extract number from temperature string (e.g., "45.0°C" -> 45.0)
+          const tempNum = parseFloat(temp.replace(/[^\d.]/g, ''));
+          if (!isNaN(tempNum)) {
+            if (tempNum < 10) {
+              root.cpuTemp = "<font color='#66ffffff'>00</font>" + tempNum.toFixed(0) + "°C";
+            } else if (tempNum < 100) {
+              root.cpuTemp = "<font color='#66ffffff'>0</font>" + tempNum.toFixed(0) + "°C";
+            } else {
+              root.cpuTemp = tempNum.toFixed(0) + "°C";
+            }
+          } else {
+            root.cpuTemp = temp;
+          }
         } else {
           // Fallback for different sensor formats
           cpuTempAltProc.running = true;
@@ -40,7 +52,19 @@ Singleton {
       onStreamFinished: {
         let temp = this.text.trim();
         if (temp && temp !== 'N/A') {
-          root.cpuTemp = temp + "°C";
+          // Extract number from temperature string
+          const tempNum = parseFloat(temp.replace(/[^\d.]/g, ''));
+          if (!isNaN(tempNum)) {
+            if (tempNum < 10) {
+              root.cpuTemp = "<font color='#66ffffff'>00</font>" + tempNum.toFixed(0) + "°C";
+            } else if (tempNum < 100) {
+              root.cpuTemp = "<font color='#66ffffff'>0</font>" + tempNum.toFixed(0) + "°C";
+            } else {
+              root.cpuTemp = tempNum.toFixed(0) + "°C";
+            }
+          } else {
+            root.cpuTemp = temp + "°C";
+          }
         }
       }
     }
@@ -58,7 +82,7 @@ Singleton {
   }
   
   Timer {
-    interval: 5000
+    interval: 2000
     running: true
     repeat: true
     onTriggered: {

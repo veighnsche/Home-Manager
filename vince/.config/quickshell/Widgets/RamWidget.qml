@@ -1,4 +1,4 @@
-// TemperatureWidget.qml
+// RamWidget.qml
 import QtQuick
 import "../Services"
 
@@ -7,11 +7,11 @@ Row {
     anchors.verticalCenter: parent.verticalCenter
     
     BaseText {
-        text: ""
+        text: ""
         font.pointSize: 14
     }
     BaseText {
-        text: Temperature.cpuTemp
+        text: SystemStats.ramUsed
         anchors.verticalCenter: parent.verticalCenter
         textFormat: Text.RichText
     }

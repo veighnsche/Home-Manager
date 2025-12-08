@@ -3,6 +3,6 @@
     "terminal.integrated.defaultProfile.linux": "zsh",
     "git.autofetch": true,
     "git.confirmSync": false,
-    "editor.fontFamily": "'JetBrainsMono NFM', 'Droid Sans Mono', 'monospace', monospace",
-    "editor.formatOnSave": true
+    "editor.fontFamily": "'Hack Nerd Font', 'Droid Sans Mono', 'monospace', monospace",
+    "qt-qml.qmlls.useQmlImportPathEnvVar": true
 }

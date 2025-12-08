@@ -1,5 +1,5 @@
 configuration {
-    font: "JetBrainsMono Nerd Font 11";
+    font: "Hack Nerd Font 11";
     show-icons: true;
     markup: true;
     drun-display-format: "<b>{name}</b>\n{generic}\n<span foreground='#9ca3af'>{comment}</span>\n<span foreground='#6b7280' size='smaller'>{categories}</span>";

@@ -4,35 +4,13 @@
 let
   repoPath = "/home/vince/Home-Manager";
   vincePathString = "${repoPath}/vince";
-  vincePath = ./vince;
 
-  mkSymlink = relPath: config.lib.file.mkOutOfStoreSymlink "${vincePathString}/${relPath}";
+  gatherFiles = import ./lib/gather-files.nix { inherit lib; };
 
-  gatherFiles = prefix: path:
-    let
-      contents = builtins.readDir path;
-    in
-      lib.attrsets.concatMapAttrs
-        (name: type:
-          let
-            rel = if prefix == "" then name else "${prefix}/${name}";
-            fullPath = path + "/${name}";
-          in
-            if type == "regular" || type == "symlink" then
-              {
-                "${rel}" = {
-                  source = mkSymlink rel;
-                  force = true;
-                };
-              }
-            else if type == "directory" then
-              gatherFiles rel fullPath
-            else
-              { }
-        )
-        contents;
-
-  vinceFiles = gatherFiles "" vincePath;
+  vinceFiles = gatherFiles {
+    path = ./vince;
+    mkSource = relPath: config.lib.file.mkOutOfStoreSymlink "${vincePathString}/${relPath}";
+  };
 in
 {
   imports = [
@@ -53,6 +31,12 @@ in
     windsurf
     nodejs_24
     uv
+
+    libreoffice-qt-fresh
+
+    hunspell
+    hunspellDicts.en_US
+    hunspellDicts.nl_NL
   ];
 
   # Allow managing HM itself via this config

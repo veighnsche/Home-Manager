@@ -21,12 +21,24 @@ Singleton {
     const usedStr = giB.toFixed(1);
     const usedNum = parseFloat(usedStr);
     
+    // Convert GB to threshold comparison (600GB = 600, 700GB = 700)
+    let colorStart = "";
+    let colorEnd = "";
+    
+    if (usedNum > 700) {
+      colorStart = "<font color='#ff6b6b'>";
+      colorEnd = "</font>";
+    } else if (usedNum > 600) {
+      colorStart = "<font color='#ffa726'>";
+      colorEnd = "</font>";
+    }
+    
     if (usedNum < 10) {
-      return "<font color='#66ffffff'>00</font>" + usedStr + " GiB";
+      return "<font color='#66ffffff'>00</font>" + colorStart + usedStr + colorEnd + " GiB";
     } else if (usedNum < 100) {
-      return "<font color='#66ffffff'>0</font>" + usedStr + " GiB";
+      return "<font color='#66ffffff'>0</font>" + colorStart + usedStr + colorEnd + " GiB";
     } else {
-      return usedStr + " GiB";
+      return colorStart + usedStr + colorEnd + " GiB";
     }
   }
 

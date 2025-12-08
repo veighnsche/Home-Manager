@@ -21,6 +21,8 @@ Singleton {
       return "<font color='#66ffffff'>00</font>" + volumeNum + " %";
     } else if (volumeNum < 100) {
       return "<font color='#66ffffff'>0</font>" + volumeNum + " %";
+    } else if (volumeNum > 100) {
+      return "<font color='#ffa726'>" + volumeNum + " %</font>";
     } else {
       return volumeNum + " %";
     }

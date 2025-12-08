@@ -7,6 +7,7 @@ Scope {
   // no more time object
 
   BasePanel {
+    id: basePanel
     screen: Quickshell.screens.find(screen => screen.name === "HDMI-A-1")
 
     anchors {
@@ -40,7 +41,7 @@ Scope {
         rightMargin: 16
       }
 
-      spacing: 24
+      spacing: 16
 
       AudioWidget {}
       SeparatorWidget {}
@@ -51,7 +52,8 @@ Scope {
       CpuWidget {}
       SeparatorWidget {}
       RamWidget {}
-      // NetworkWidget {}
+      SeparatorWidget {}
+      NetworkWidget {}
     }
     
   }

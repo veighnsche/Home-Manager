@@ -23,7 +23,20 @@ Singleton {
   // Shared function to format CPU usage with leading zero
   function formatCpuUsage(usage) {
     if (isNaN(usage)) return "0.0 %";
-    return (usage < 10 ? "<font color='#66ffffff'>0</font>" : "") + usage.toFixed(1) + " %";
+    
+    let colorStart = "";
+    let colorEnd = "";
+    
+    // Add warning/danger colors for CPU
+    if (usage > 90) {
+      colorStart = "<font color='#ff6b6b'>";
+      colorEnd = "</font>";
+    } else if (usage > 75) {
+      colorStart = "<font color='#ffa726'>";
+      colorEnd = "</font>";
+    }
+    
+    return (usage < 10 ? "<font color='#66ffffff'>0</font>" : "") + colorStart + usage.toFixed(1) + colorEnd + " %";
   }
 
   // Shared function to format RAM usage with leading zero
@@ -31,7 +44,20 @@ Singleton {
     if (isNaN(giB)) return "0.0 GiB";
     const usedStr = giB.toFixed(1);
     const usedNum = parseFloat(usedStr);
-    return (usedNum < 10 ? "<font color='#66ffffff'>0</font>" : "") + usedStr + " GiB";
+    
+    let colorStart = "";
+    let colorEnd = "";
+    
+    // Add warning/danger colors for RAM (thresholds in GB)
+    if (usedNum > 57.5) {
+      colorStart = "<font color='#ff6b6b'>";
+      colorEnd = "</font>";
+    } else if (usedNum > 50) {
+      colorStart = "<font color='#ffa726'>";
+      colorEnd = "</font>";
+    }
+    
+    return (usedNum < 10 ? "<font color='#66ffffff'>0</font>" : "") + colorStart + usedStr + colorEnd + " GiB";
   }
 
   // ───────────────── CPU from /proc/stat ─────────────────

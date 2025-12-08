@@ -30,7 +30,15 @@ in
   home.packages = with pkgs; [
     windsurf
     nodejs_24
+    python314
+    gcc
     uv
+    libffi
+    libffi.dev
+    pkg-config
+    openssl.dev
+    rustc
+    cargo
 
     libreoffice-qt-fresh
 
@@ -38,6 +46,12 @@ in
     hunspellDicts.en_US
     hunspellDicts.nl_NL
   ];
+
+  # Environment variables for Python package compilation
+  programs.zsh.initContent = ''
+    export PKG_CONFIG_PATH="${pkgs.libffi.dev}/lib/pkgconfig:${pkgs.openssl.dev}/lib/pkgconfig"
+    export NIX_CFLAGS_COMPILE="-I${pkgs.libffi.dev}/include -I${pkgs.openssl.dev}/include"
+  '';
 
   # Allow managing HM itself via this config
   programs.home-manager.enable = true;

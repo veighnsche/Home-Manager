@@ -40,6 +40,13 @@ in
     # Blue light filtering for Wayland
     wlsunset # Day/night gamma adjustments
     swaybg # Wallpaper setter for Wayland
+
+    # TEAM_014: Screenshot tools for Wayland
+    grim # Screenshot capture
+    slurp # Region selection
+    wl-clipboard # Clipboard support (wl-copy)
+    jq # JSON parsing for window geometry
+    libnotify # Desktop notifications (notify-send)
   ];
 
   # TEAM_007: GNOME Keyring for secret storage (WiFi passwords)

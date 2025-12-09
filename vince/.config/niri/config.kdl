@@ -1,7 +1,7 @@
 // Niri config (KDL). See https://yalter.github.io/niri/ for full docs.
 
 environment {
-    XDG_CURRENT_DESKTOP "wlroots"
+    XDG_CURRENT_DESKTOP "niri"
     GDK_BACKEND "wayland"
     MOZ_ENABLE_WAYLAND "1"
     GTK_THEME "Adwaita:dark"
@@ -431,9 +431,11 @@ binds {
 
     Mod+Shift+Q repeat=false { close-window; }
 
-    // screenshots
-    Mod+Ctrl+Shift+S hotkey-overlay-title="Screenshot focused tile" { spawn-sh "~/bin/blep-shot tile"; }
-    Mod+Shift+S      hotkey-overlay-title="Screenshot region"       { spawn-sh "~/bin/blep-shot region"; }
+    // TEAM_015: Screenshots (grim + slurp → clipboard) - script now in PATH via Nix
+    Print            hotkey-overlay-title="Screenshot region"       { spawn "screenshot" "region"; }
+    Mod+Shift+S      hotkey-overlay-title="Screenshot region"       { spawn "screenshot" "region"; }
+    Mod+Print        hotkey-overlay-title="Screenshot full screen"  { spawn "screenshot" "screen"; }
+    Mod+Ctrl+Print   hotkey-overlay-title="Screenshot window"       { spawn "screenshot" "window"; }
 
     // reload config
     Mod+Shift+C { spawn-sh "niri msg action load-config-file"; }
@@ -541,7 +543,7 @@ binds {
     // Mod+Space       { switch-layout "next"; }
     // Mod+Shift+Space { switch-layout "prev"; }
 
-    Print { spawn "grim"; }
+    // Print key now handled above with region selection
 
     Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 

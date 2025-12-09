@@ -22,6 +22,7 @@ in
     ./shell.nix
     ./kde.nix
     ./wlroots.nix
+    ./scripts.nix  # TEAM_015: Package ~/bin scripts as Nix derivations
   ];
 
   # Tell Home Manager which user this config is for
@@ -61,8 +62,6 @@ in
     hunspellDicts.en_US
     hunspellDicts.nl_NL
 
-    # QR code generation for URL sharing
-    qrencode
   ];
 
   # Environment variables for Python package compilation
@@ -71,10 +70,10 @@ in
     export NIX_CFLAGS_COMPILE="-I${pkgs.libffi.dev}/include -I${pkgs.openssl.dev}/include"
   '';
 
-  # Add ~/bin to PATH for global script access
-  home.sessionVariables = {
-    PATH = "$HOME/bin:$PATH";
-  };
+  # TEAM_015: ~/bin in PATH for any manual scripts (main scripts are now Nix derivations in scripts.nix)
+  home.sessionPath = [
+    "$HOME/bin"
+  ];
 
   # Allow managing HM itself via this config
   programs.home-manager.enable = true;

@@ -30,10 +30,8 @@
 
   outputs = { nixpkgs, home-manager, plasma-manager, quickshell, codex-cli-nix, ... }:
     let
-      system = "x86_64-linux";
-
       codexOverlay = final: prev: {
-        codex = codex-cli-nix.packages.${final.system}.default;
+        codex = codex-cli-nix.packages.${final.stdenv.hostPlatform.system}.default;
       };
 
       overlays = [
@@ -54,8 +52,12 @@
       ];
 
       pkgs = import nixpkgs {
-        inherit system overlays;
-        config.allowUnfree = true;
+        system = "x86_64-linux";
+        inherit overlays;
+        config = {
+          allowUnfree = true;
+          android_sdk.accept_license = true;
+        };
       };
     in {
       homeConfigurations."vince" =

@@ -9,5 +9,6 @@
     "[nix]": {
         "editor.insertSpaces": true,
         "editor.tabSize": 2
-    }
+    },
+    "remote.autoForwardPortsSource": "hybrid"
 }

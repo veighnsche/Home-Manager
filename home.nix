@@ -23,6 +23,7 @@ in
     ./kde.nix
     ./wlroots.nix
     ./scripts.nix  # TEAM_015: Package ~/bin scripts as Nix derivations
+    ./dev.nix      # TEAM_016: Development environment (Android SDK, languages, tooling)
   ];
 
   # Tell Home Manager which user this config is for
@@ -32,27 +33,20 @@ in
   # Home Manager version (when you started using it)
   home.stateVersion = "26.05";
 
-  # User packages
+  # User packages (dev tools in dev.nix)
   home.packages = with pkgs; [
+    fastfetch
+    
+    # Editors
     windsurf
     zed-editor
     helix
-
     codex
 
-    nodejs_24
-    python314
-    gcc
-    uv
-    libffi
-    libffi.dev
-    pkg-config
-    openssl.dev
-    rustc
-    cargo
-    nixd
-    nil
+    # Media
+    vlc
 
+    # Office
     libreoffice-qt-fresh
 
     kdePackages.kdeconnect-kde
@@ -63,12 +57,6 @@ in
     hunspellDicts.nl_NL
 
   ];
-
-  # Environment variables for Python package compilation
-  programs.zsh.initContent = ''
-    export PKG_CONFIG_PATH="${pkgs.libffi.dev}/lib/pkgconfig:${pkgs.openssl.dev}/lib/pkgconfig"
-    export NIX_CFLAGS_COMPILE="-I${pkgs.libffi.dev}/include -I${pkgs.openssl.dev}/include"
-  '';
 
   # TEAM_015: ~/bin in PATH for any manual scripts (main scripts are now Nix derivations in scripts.nix)
   home.sessionPath = [

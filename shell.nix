@@ -61,6 +61,9 @@
       cat = "bat";
       ping = "prettyping --nolegend";
 
+      # TEAM_017: Force OpenGL renderer to fix black screen on Wayland
+      scrcpy = "scrcpy --render-driver=opengl";
+
       hm = "nix run home-manager/master -- switch --flake /home/vince/Home-Manager#vince -b backup";
       hmn = "nix run home-manager/master -- news --flake /home/vince/Home-Manager#vince -b backup";
     };

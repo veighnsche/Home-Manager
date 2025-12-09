@@ -1,5 +1,10 @@
 # /home/vince/Home-Manager/home.nix
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   repoPath = "/home/vince/Home-Manager";
@@ -29,6 +34,11 @@ in
   # User packages
   home.packages = with pkgs; [
     windsurf
+    zed-editor
+    helix
+
+    codex
+
     nodejs_24
     python314
     gcc
@@ -39,6 +49,8 @@ in
     openssl.dev
     rustc
     cargo
+    nixd
+    nil
 
     libreoffice-qt-fresh
 
@@ -85,7 +97,7 @@ in
       "*" = {
         identityFile = [ "~/.ssh/id_ed25519" ];
         identitiesOnly = true;
-        addKeysToAgent = "yes";  # modern replacement for the old top-level option
+        addKeysToAgent = "yes"; # modern replacement for the old top-level option
         userKnownHostsFile = "~/.ssh/known_hosts";
         # you can add more defaults here later
       };

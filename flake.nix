@@ -21,15 +21,27 @@
       url = "git+https://git.outfoxxed.me/quickshell/quickshell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    codex-cli-nix = {
+      url = "github:sadjow/codex-cli-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { nixpkgs, home-manager, plasma-manager, quickshell, ... }:
+  outputs = { nixpkgs, home-manager, plasma-manager, quickshell, codex-cli-nix, ... }:
     let
       system = "x86_64-linux";
+
+      codexOverlay = final: prev: {
+        codex = codex-cli-nix.packages.${final.system}.default;
+      };
 
       overlays = [
         # Quickshell overlay so pkgs.quickshell exists
         quickshell.overlays.default
+
+        # Codex overlay so pkgs.codex is our custom flake package
+        codexOverlay
 
         # Your Windsurf overlay
         (final: prev: {
@@ -49,6 +61,7 @@
       homeConfigurations."vince" =
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
+
           modules = [
             plasma-manager.homeModules.plasma-manager
             ./home.nix

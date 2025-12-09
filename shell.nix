@@ -1,16 +1,16 @@
 # TEAM_426: Shell configuration for vince
-{ config, pkgs, lib, ... }:
+{ config, pkgs, ... }:
 
 {
   home.packages = with pkgs; [
     # Better CLI tools (upgrades from common/)
-    bat           # cat with syntax highlighting
-    eza           # ls replacement
-    ripgrep       # fast grep
-    fd            # find replacement
-    fzf           # fuzzy finder
-    jq            # JSON processor
-    yq-go         # YAML processor
+    bat # cat with syntax highlighting
+    eza # ls replacement
+    ripgrep # fast grep
+    fd # find replacement
+    fzf # fuzzy finder
+    jq # JSON processor
+    yq-go # YAML processor
 
     # Remote access
     mosh
@@ -67,7 +67,7 @@
 
     oh-my-zsh = {
       enable = true;
-      theme = "robbyrussell";  # Overridden by Starship
+      theme = "robbyrussell"; # Overridden by Starship
       plugins = [
         "git"
         "sudo"
@@ -90,10 +90,10 @@
 
       palette = "darkwall";
       palettes.darkwall = {
-        bg     = "#1a1a1a";
-        fg     = "#e0e0e0";
+        bg = "#1a1a1a";
+        fg = "#e0e0e0";
         accent = "#7aa2f7";
-        error  = "#f7768e";
+        error = "#f7768e";
         subtle = "#565f89";
       };
 
@@ -113,7 +113,7 @@
 
       character = {
         success_symbol = "[>](fg:accent)";
-        error_symbol   = "[>](fg:error)";
+        error_symbol = "[>](fg:error)";
       };
 
       battery.disabled = true;
@@ -136,4 +136,30 @@
     enableZshIntegration = true;
     nix-direnv.enable = true;
   };
+
+  programs.ssh = {
+    enable = true;
+
+    # stop using the old implicit defaults
+    enableDefaultConfig = false;
+
+    matchBlocks = {
+      # Global defaults for all hosts
+      "*" = {
+        identityFile = [ "~/.ssh/id_ed25519" ];
+        identitiesOnly = true;
+        addKeysToAgent = "yes";
+        userKnownHostsFile = "~/.ssh/known_hosts";
+      };
+
+      # Specific override for workstation
+      workstation = {
+        hostname = "192.168.178.29";
+        user = "vince";
+        forwardAgent = true;
+        # inherits identityFile etc from "*" unless you override them here
+      };
+    };
+  };
+
 }

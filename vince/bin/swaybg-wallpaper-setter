@@ -1,0 +1,98 @@
+#!/usr/bin/env bash
+# swaybg wallpaper setter for Niri sessions
+
+set -Eeuo pipefail
+
+# --- Helpers ---------------------------------------------------------------
+
+log() {
+  printf '[niri-wallpaper] %s\n' "$*" >&2
+}
+
+# --- Guard: only run in niri sessions -------------------------------------
+
+case "${XDG_CURRENT_DESKTOP:-}" in
+  niri|wlroots) : ;;  # OK
+  *)
+    log "Not running in niri or wlroots session (XDG_CURRENT_DESKTOP=${XDG_CURRENT_DESKTOP:-unset}), exiting"
+    exit 0
+    ;;
+esac
+
+# --- Config ----------------------------------------------------------------
+
+WALLPAPER_DIR="${HOME}/Home-Manager/vince/Pictures/Wallpapers"
+SWAYBG_BIN="${SWAYBG_BIN:-swaybg}"
+
+if ! command -v "$SWAYBG_BIN" >/dev/null 2>&1; then
+  log "swaybg not found (tried: $SWAYBG_BIN)"
+  exit 1
+fi
+
+if [ ! -d "$WALLPAPER_DIR" ]; then
+  log "Wallpaper dir not found: $WALLPAPER_DIR"
+  exit 0
+fi
+
+# --- Discover monitors via JSON --------------------------------------------
+
+if ! command -v jq >/dev/null 2>&1; then
+  log "jq not found; cannot parse 'niri msg --json outputs'"
+  MONITORS=()
+else
+  # niri msg --json outputs returns an object whose keys are the output names
+  # e.g. { "HDMI-A-1": { ... }, "DP-1": { ... } }
+  mapfile -t MONITORS < <(
+    niri msg --json outputs \
+      | jq -r 'keys[]' 2>/dev/null \
+      || true
+  )
+fi
+
+if [ "${#MONITORS[@]}" -eq 0 ]; then
+  log "No monitors detected from 'niri msg --json outputs'"
+fi
+
+
+# --- Build per-monitor args -----------------------------------------------
+
+declare -a ARGS=()
+
+for monitor in "${MONITORS[@]}"; do
+  # Prefer PNG, but fall back to JPG if present
+  for ext in png jpg jpeg; do
+    candidate="${WALLPAPER_DIR}/${monitor}.${ext}"
+    if [ -f "$candidate" ]; then
+      log "Assigning $candidate -> $monitor"
+      ARGS+=(-o "$monitor" -i "$candidate")
+      break
+    fi
+  done
+done
+
+# --- Fallback: single wallpaper for all outputs ---------------------------
+
+if [ "${#ARGS[@]}" -eq 0 ]; then
+  # Use first PNG/JPG we can find
+  FIRST_WALLPAPER=$(
+    find "$WALLPAPER_DIR" -maxdepth 1 -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' \) \
+      | sort \
+      | head -n1
+  )
+
+  if [ -n "${FIRST_WALLPAPER:-}" ]; then
+    log "Using fallback wallpaper for all monitors: $FIRST_WALLPAPER"
+    ARGS=(-i "$FIRST_WALLPAPER")
+  else
+    log "No wallpapers found in $WALLPAPER_DIR"
+    exit 0
+  fi
+fi
+
+# --- Run swaybg ------------------------------------------------------------
+
+# Optional: kill existing swaybg instances started by this script
+pkill -x swaybg 2>/dev/null || true
+
+log "Starting swaybg: $SWAYBG_BIN ${ARGS[*]}"
+exec "$SWAYBG_BIN" "${ARGS[@]}"

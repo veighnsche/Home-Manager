@@ -2,7 +2,7 @@
 import QtQuick
 
 Text {
-  color: "white"
-  font.family: "Hack Nerd Font Mono"
-  font.pointSize: 11
+    color: "white"
+    font.family: "Hack Nerd Font Mono"
+    font.pointSize: 11
 }

@@ -55,6 +55,7 @@ in
     libreoffice-qt-fresh
 
     kdePackages.kdeconnect-kde
+    kdePackages.qtdeclarative
 
     hunspell
     hunspellDicts.en_US

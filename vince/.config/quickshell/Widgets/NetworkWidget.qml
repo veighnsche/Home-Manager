@@ -5,7 +5,7 @@ import "../Services"
 Row {
     spacing: 8
     anchors.verticalCenter: parent.verticalCenter
-    
+
     BaseText {
         text: Network.isWired ? "󰈁" : Network.isWifi ? "" : ""
         font.pointSize: 17

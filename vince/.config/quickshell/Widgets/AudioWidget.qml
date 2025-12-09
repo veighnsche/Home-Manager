@@ -4,7 +4,7 @@ import "../Services"
 
 Row {
     spacing: 8
-    
+
     BaseText {
         text: Audio.muted ? "󰝟" : ""
         font.pointSize: 20
